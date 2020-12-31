@@ -15,6 +15,7 @@ limitations under the License.
 
 #include "sdkconfig.h"
 #include "esp_attr.h"
+#include <esp_log.h>
 
 #include "main_functions.h"
 
@@ -28,6 +29,8 @@ limitations under the License.
 #include "tensorflow/lite/micro/micro_mutable_op_resolver.h"
 #include "tensorflow/lite/schema/schema_generated.h"
 #include "tensorflow/lite/version.h"
+
+unsigned long start_time;
 
 // Globals, used for compatibility with Arduino-style sketches.
 namespace {
@@ -95,6 +98,8 @@ void setup() {
 
 // The name of this function is important for Arduino compatibility.
 void loop() {
+  start_time = esp_log_timestamp();
+
   // Get image from provider.
   if (kTfLiteOk != GetImage(error_reporter, kNumCols, kNumRows, kNumChannels,
                             input->data.uint8)) {
@@ -112,4 +117,9 @@ void loop() {
   uint8_t person_score = output->data.uint8[kPersonIndex];
   uint8_t no_person_score = output->data.uint8[kNotAPersonIndex];
   RespondToDetection(error_reporter, person_score, no_person_score);
+
+  // Subtract 2000 as LED is glowing for 1000 ms in "detection_responder.cc"
+  TF_LITE_REPORT_ERROR(error_reporter, "time elapsed for detection: %d ms\n",
+                       (esp_log_timestamp()-start_time-1000));
+
 }

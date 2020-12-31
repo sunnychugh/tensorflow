@@ -41,11 +41,11 @@ void RespondToDetection(tflite::ErrorReporter* error_reporter,
 
   if (person_score < no_person_score) {
       gpio_set_level(LED_R, 1);
-      vTaskDelay(2000 / portTICK_PERIOD_MS);
+      vTaskDelay(1000 / portTICK_PERIOD_MS);
     }
   else {
       gpio_set_level(LED_G, 1);
-      vTaskDelay(2000 / portTICK_PERIOD_MS);
+      vTaskDelay(1000 / portTICK_PERIOD_MS);
   }
   gpio_set_level(LED_R, 0);
   gpio_set_level(LED_G, 0);
