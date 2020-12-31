@@ -13,6 +13,9 @@ See the License for the specific language governing permissions and
 limitations under the License.
 ==============================================================================*/
 
+#include "sdkconfig.h"
+#include "esp_attr.h"
+
 #include "main_functions.h"
 
 #include "detection_responder.h"
@@ -34,8 +37,8 @@ tflite::MicroInterpreter* interpreter = nullptr;
 TfLiteTensor* input = nullptr;
 
 // An area of memory to use for input, output, and intermediate arrays.
-constexpr int kTensorArenaSize = 93 * 1024;
-static uint8_t tensor_arena[kTensorArenaSize];
+constexpr int kTensorArenaSize = 3 * 1024 * 1024;
+EXT_RAM_ATTR static uint8_t tensor_arena[kTensorArenaSize];
 }  // namespace
 
 // The name of this function is important for Arduino compatibility.
